@@ -1,8 +1,69 @@
 homepage:
   show_experience: true
-  show_news: true
+  show_news: false
   show_selected_publications: true
   num_news: 10
+
+activities:
+  show_hero: true
+  hero_kicker: Activities
+  hero_title: Research Talks, Experience, and Patents
+  hero_description: >-
+    A curated snapshot of selected academic activities, including invited talks,
+    teaching and program experience, and recent patent work.
+  sections:
+    - key: talk
+      title: Research Talks
+      stat_label: Research Talks
+      description: Selected invited or conference presentations
+      icon: microphone-alt
+      column_class: col-12 mb-4
+    - key: experience
+      title: Miscellaneous Experience
+      stat_label: Experience Items
+      description: Teaching and academic program experience
+      icon: briefcase
+      column_class: col-12 col-xl-7 mb-4
+    - key: patent
+      title: Patents
+      stat_label: Patents
+      description: Recent invention disclosures and patent work
+      icon: lightbulb
+      column_class: col-12 col-xl-5 mb-4
+
+daily:
+  show_hero: true
+  hero_kicker: Daily
+  hero_title: Sports, Running, and Photography
+  hero_description: >-
+    The personal page for sports memories and selected photography.
+  sections:
+    - key: sports
+      title: Sports
+      stat_label: Sports
+      description: Baseball, softball, and team memories
+      icon: baseball-ball
+      column_class: col-12 mb-4
+      layout: feature
+      empty_message: Add a `_daily/sports_*.md` item to show your baseball content here.
+    - key: running
+      title: Running
+      stat_label: Running Events
+      description: Selected runs and medal memories
+      icon: person-running
+      column_class: col-12 mb-4
+      layout: grid
+      item_column_class: col-md-6 col-xl-3 mb-3
+      empty_message: Add running entries with medal photos to build this section.
+    # - key: photography
+    #   title: Photography
+    #   stat_label: Photo Stories
+    #   description: Selected photographs and visual notes
+    #   icon: camera-retro
+    #   column_class: col-12 mb-4
+    #   layout: grid
+    #   item_column_class: col-md-6 col-xl-4 mb-3
+    #   empty_message: Add `_daily/photography_*.md` entries with `hero_image` to show your photos here.
 
 # Feel free to replace the footer text if you would like to, but I will greatly appreciate it 
 # if you keep the link to the template so that more people can benefit from it. Thanks!

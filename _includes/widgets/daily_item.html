@@ -1,0 +1,86 @@
+{% assign item = include.item %}
+{% assign body_text = item.content | strip %}
+{% assign meta_text = item.meta %}
+{% assign media_height = item.image_height | default: include.image_height | default: '18rem' %}
+{% assign image_fit = item.image_fit | default: 'cover' %}
+{% assign image_position = item.image_position | default: 'center center' %}
+{% assign image_background = item.image_background | default: '#f3f5f7' %}
+
+{% if meta_text == nil or meta_text == '' %}
+    {% if item.venue and item.location %}
+        {% capture meta_text %}{{ item.venue }} &middot; {{ item.location }}{% endcapture %}
+    {% elsif item.venue %}
+        {% assign meta_text = item.venue %}
+    {% elsif item.location %}
+        {% assign meta_text = item.location %}
+    {% endif %}
+{% endif %}
+
+<div class="daily-entry">
+    {% if item.hero_image or item.image_placeholder %}
+    <div class="daily-entry-media" style="height: {{ media_height }}; background: {{ image_background }};">
+        {% if item.hero_image %}
+        <img src="{{ item.hero_image | relative_url }}" alt="{{ item.image_alt | default: item.title }}" style="object-fit: {{ image_fit }}; object-position: {{ image_position }};">
+        {% else %}
+        <div class="daily-entry-placeholder">
+            <i class="fas fa-image"></i>
+            <div>{{ item.image_placeholder }}</div>
+        </div>
+        {% endif %}
+
+        {% if item.image_caption %}
+        <div class="daily-entry-caption">{{ item.image_caption }}</div>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="daily-entry-body d-flex flex-column">
+        <div class="daily-entry-head d-flex flex-column flex-md-row justify-content-between align-items-md-start mb-3">
+            <div class="daily-entry-main pr-md-3 mb-2 mb-md-0">
+                {% if item.badge %}
+                <div class="daily-badge mb-3">{{ item.badge }}</div>
+                {% endif %}
+
+                <h3 class="h5 mb-1">
+                    {% if item.external_url %}
+                    <a class="text-body" target="_blank" href="{{ item.external_url }}">{{ item.title }}</a>
+                    {% else %}
+                    {{ item.title }}
+                    {% endif %}
+                </h3>
+
+                {% if item.subtitle %}
+                <div class="daily-meta mb-2">{{ item.subtitle }}</div>
+                {% endif %}
+
+                {% if meta_text != nil and meta_text != '' %}
+                <div class="daily-meta">{{ meta_text }}</div>
+                {% endif %}
+            </div>
+
+            {% if item.date_label %}
+            <div class="daily-date">{{ item.date_label }}</div>
+            {% elsif item.date %}
+            <div class="daily-date">{{ item.date | date: "%b %Y" }}</div>
+            {% endif %}
+        </div>
+
+        {% if item.summary %}
+        <p class="daily-note mb-0">{{ item.summary }}</p>
+        {% elsif body_text != '' %}
+        <div class="daily-note mb-0">{{ item.content | markdownify }}</div>
+        {% endif %}
+
+        {% if item.links %}
+        <p class="small pt-3 pb-0 mb-0 daily-links mt-auto">
+            {% for link in item.links %}
+            {% if link[1].url %}
+            <a target="{{ link[1]['target'] | default: '_blank' }}" href="{{ link[1]['url'] }}">[{{ link[0] }}]</a>
+            {% else %}
+            <a target="_blank" href="{{ link[1] }}">[{{ link[0] }}]</a>
+            {% endif %}
+            {% endfor %}
+        </p>
+        {% endif %}
+    </div>
+</div>

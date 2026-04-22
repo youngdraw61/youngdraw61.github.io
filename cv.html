@@ -1,0 +1,66 @@
+---
+layout: default
+title : CV
+navbar_title: CV
+---
+
+{% assign cv_url = '/assets/files/cv.pdf' | relative_url %}
+
+<style>
+    .cv-hero-actions .btn {
+        min-width: 8.5rem;
+    }
+
+    .cv-pdf-frame {
+        width: 100%;
+        height: 72rem;
+        border: 0;
+        display: block;
+        background-color: #f8f9fa;
+    }
+
+    @media (max-width: 767.98px) {
+        .cv-pdf-frame {
+            height: 78vh;
+        }
+    }
+</style>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm bg-white mb-4">
+            <div class="card-body p-4">
+                <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
+                    <div class="pr-lg-4 mb-3 mb-lg-0">
+                        <div class="text-muted text-uppercase small mb-2">Curriculum Vitae</div>
+                        <h1 class="h3 mb-2">{{ site.data.profile.primary_name }}</h1>
+                        <p class="text-muted mb-0">
+                            Preview the latest CV below, or open the PDF in a new tab for the best reading experience.
+                        </p>
+                    </div>
+                    <div class="cv-hero-actions d-flex flex-wrap">
+                        <a class="btn btn-dark btn-sm mr-2 mb-2" target="_blank" rel="noopener noreferrer" href="{{ cv_url }}">
+                            <i class="fas fa-up-right-from-square mr-1"></i> Open PDF
+                        </a>
+                        <a class="btn btn-outline-dark btn-sm mb-2" href="{{ cv_url }}" download>
+                            <i class="fas fa-download mr-1"></i> Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card border-0 shadow-sm bg-white overflow-hidden">
+            <div class="card-body p-0">
+                <iframe
+                    class="cv-pdf-frame"
+                    src="{{ cv_url }}#toolbar=1&navpanes=0&view=FitH"
+                    title="{{ site.data.profile.primary_name }} CV">
+                </iframe>
+            </div>
+            <div class="card-footer border-0 bg-white px-4 py-3 text-muted small">
+                If the embedded preview does not load in your browser, use "Open PDF" or "Download".
+            </div>
+        </div>
+    </div>
+</div>

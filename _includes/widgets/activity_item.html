@@ -1,0 +1,63 @@
+{% assign item = include.item %}
+{% assign body_text = item.content | strip %}
+{% assign meta_text = item.meta %}
+
+{% if meta_text == nil or meta_text == '' %}
+    {% if item.venue and item.location %}
+        {% capture meta_text %}{{ item.venue }} &middot; {{ item.location }}{% endcapture %}
+    {% elsif item.venue %}
+        {% assign meta_text = item.venue %}
+    {% elsif item.location %}
+        {% assign meta_text = item.location %}
+    {% endif %}
+{% endif %}
+
+<div class="activity-entry{% if item.featured %} featured{% endif %}">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start">
+        <div class="pr-md-4 mb-3 mb-md-0">
+            {% if item.badge %}
+            <div class="activity-chip mb-3">{{ item.badge }}</div>
+            {% endif %}
+
+            <h3 class="h5 mb-1">
+                {% if item.external_url %}
+                <a class="text-body activity-title-link" target="_blank" href="{{ item.external_url }}">{{ item.title }}</a>
+                {% else %}
+                {{ item.title }}
+                {% endif %}
+            </h3>
+
+            {% if item.subtitle %}
+            <div class="activity-meta mb-2">{{ item.subtitle }}</div>
+            {% endif %}
+
+            {% if meta_text != nil and meta_text != '' %}
+            <div class="activity-meta mb-2">{{ meta_text }}</div>
+            {% endif %}
+
+            {% if item.summary %}
+            <p class="activity-note mb-0">{{ item.summary }}</p>
+            {% elsif body_text != '' %}
+            <div class="activity-note mb-0">{{ item.content | markdownify }}</div>
+            {% endif %}
+
+            {% if item.links %}
+            <p class="small pt-3 pb-0 mb-0 activity-links">
+                {% for link in item.links %}
+                {% if link[1].url %}
+                <a target="{{ link[1]['target'] | default: '_blank' }}" href="{{ link[1]['url'] }}">[{{ link[0] }}]</a>
+                {% else %}
+                <a target="_blank" href="{{ link[1] }}">[{{ link[0] }}]</a>
+                {% endif %}
+                {% endfor %}
+            </p>
+            {% endif %}
+        </div>
+
+        {% if item.date_label %}
+        <div class="activity-date">{{ item.date_label }}</div>
+        {% elsif item.date %}
+        <div class="activity-date">{{ item.date | date: "%b %Y" }}</div>
+        {% endif %}
+    </div>
+</div>

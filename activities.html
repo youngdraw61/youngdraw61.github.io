@@ -1,0 +1,189 @@
+---
+layout: default
+title : Activities
+navbar_title: Activities
+---
+
+{% assign activity_config = site.data.display.activities %}
+{% assign activity_items = '' | split: '' %}
+{% assign activity_sections = '' | split: '' %}
+
+{% if activity_config and activity_config.sections %}
+    {% assign activity_sections = activity_config.sections %}
+{% endif %}
+
+{% if site.activities %}
+    {% assign activity_items = site.activities | where: "show", true | sort: "date" | reverse %}
+{% endif %}
+
+<style>
+    .activities-hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #f7f9fc 55%, #eef3f9 100%);
+    }
+
+    .activities-hero::after {
+        content: "";
+        position: absolute;
+        top: -4rem;
+        right: -4rem;
+        width: 14rem;
+        height: 14rem;
+        border-radius: 50%;
+        background: rgba(52, 58, 64, 0.05);
+    }
+
+    .activities-hero-body {
+        position: relative;
+        z-index: 1;
+    }
+
+    .activities-kicker {
+        letter-spacing: 0.08em;
+    }
+
+    .activities-stat {
+        min-width: 7rem;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 0.9rem;
+        background: rgba(255, 255, 255, 0.75);
+    }
+
+    .activities-stat-number {
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .activity-panel {
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .activity-section-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.8rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f5f7;
+        color: #495057;
+    }
+
+    .activity-entry {
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 0.9rem;
+        padding: 1.2rem 1.25rem;
+        background: #fcfcfd;
+    }
+
+    .activity-entry + .activity-entry {
+        margin-top: 1rem;
+    }
+
+    .activity-entry.featured {
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+        border-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .activity-date {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 7.5rem;
+        border-radius: 999px;
+        background: #212529;
+        color: #ffffff;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        padding: 0.45rem 0.9rem;
+    }
+
+    .activity-meta {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .activity-note {
+        color: #495057;
+    }
+
+    .activity-note p:last-child {
+        margin-bottom: 0;
+    }
+
+    .activity-chip {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: #eef2f6;
+        color: #495057;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.3rem 0.7rem;
+    }
+
+    .activity-title-link:hover {
+        text-decoration: none;
+    }
+
+    .activity-links a {
+        margin-right: 0.35rem;
+    }
+
+    @media (max-width: 767.98px) {
+        .activities-stat {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .activity-date {
+            min-width: 0;
+            display: inline-block;
+        }
+    }
+</style>
+
+{% if activity_config.show_hero != false %}
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm activities-hero mb-4">
+            <div class="card-body p-4 p-lg-5 activities-hero-body">
+                <div class="text-muted text-uppercase small mb-2 activities-kicker">{{ activity_config.hero_kicker }}</div>
+                <h1 class="h3 mb-3">{{ activity_config.hero_title }}</h1>
+                <p class="text-muted mb-4 col-lg-8 px-0">{{ activity_config.hero_description }}</p>
+                <div class="d-flex flex-column flex-md-row flex-wrap">
+                    {% for section in activity_sections %}
+                    {% assign section_items = activity_items | where: "category", section.key %}
+                    <div class="activities-stat px-3 py-3 mr-md-3 mb-3 mb-md-0">
+                        <div class="activities-stat-number">{{ section_items | size }}</div>
+                        <div class="small text-muted">{{ section.stat_label | default: section.title }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if activity_items.size > 0 %}
+<div class="row">
+    {% for section in activity_sections %}
+        {% assign section_items = activity_items | where: "category", section.key %}
+        {% include widgets/activity_section.html section=section items=section_items %}
+    {% endfor %}
+</div>
+{% else %}
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm bg-white">
+            <div class="card-body p-4 text-muted">
+                No activities have been added yet.
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

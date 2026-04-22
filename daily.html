@@ -1,0 +1,263 @@
+---
+layout: default
+title : Daily
+navbar_title: Daily
+---
+
+{% assign daily_config = site.data.display.daily %}
+{% assign daily_items = '' | split: '' %}
+{% assign daily_sections = '' | split: '' %}
+
+{% if daily_config and daily_config.sections %}
+    {% assign daily_sections = daily_config.sections %}
+{% endif %}
+
+{% if site.daily %}
+    {% assign daily_items = site.daily | where: "show", true | sort: "date" | reverse %}
+{% endif %}
+
+<style>
+    .daily-hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #eef4ff 100%);
+    }
+
+    .daily-hero::before {
+        content: "";
+        position: absolute;
+        right: -5rem;
+        top: -5rem;
+        width: 16rem;
+        height: 16rem;
+        border-radius: 50%;
+        background: rgba(13, 110, 253, 0.06);
+    }
+
+    .daily-hero-body {
+        position: relative;
+        z-index: 1;
+    }
+
+    .daily-kicker {
+        letter-spacing: 0.08em;
+    }
+
+    .daily-stat {
+        min-width: 8rem;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 0.9rem;
+        background: rgba(255, 255, 255, 0.78);
+    }
+
+    .daily-stat-number {
+        font-size: 1.35rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    .daily-panel {
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .daily-section-icon {
+        width: 2.6rem;
+        height: 2.6rem;
+        border-radius: 0.9rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #f3f6fa;
+        color: #495057;
+    }
+
+    .daily-entry {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 1rem;
+        background: #ffffff;
+        box-shadow: 0 0.2rem 1rem rgba(0, 0, 0, 0.03);
+    }
+
+    .daily-grid-item {
+        display: flex;
+    }
+
+    .daily-grid-item .daily-entry {
+        width: 100%;
+        height: 100%;
+    }
+
+    .daily-entry + .daily-entry {
+        margin-top: 1rem;
+    }
+
+    .daily-entry-body {
+        flex: 1 1 auto;
+        width: 100%;
+        min-width: 0;
+        box-sizing: border-box;
+        padding: 1.25rem 1.25rem 1.35rem;
+    }
+
+    .daily-entry-head {
+        width: 100%;
+        min-width: 0;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .daily-entry-main {
+        min-width: 0;
+        flex: 1 1 0;
+    }
+
+    .daily-entry-media {
+        position: relative;
+        overflow: hidden;
+        background: #f3f5f7;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .daily-entry-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .daily-entry-placeholder {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #6c757d;
+        background: linear-gradient(180deg, #fbfcfe 0%, #f2f5f8 100%);
+        padding: 1.5rem;
+    }
+
+    .daily-entry-placeholder i {
+        font-size: 1.8rem;
+        margin-bottom: 0.75rem;
+        color: #adb5bd;
+    }
+
+    .daily-entry-caption {
+        position: absolute;
+        left: 0.85rem;
+        bottom: 0.85rem;
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: rgba(33, 37, 41, 0.78);
+        color: #ffffff;
+        font-size: 0.78rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .daily-badge {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        background: #edf3ff;
+        color: #315288;
+        font-size: 0.78rem;
+        font-weight: 700;
+        padding: 0.32rem 0.72rem;
+    }
+
+    .daily-date {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: #212529;
+        color: #ffffff;
+        font-size: 0.8rem;
+        font-weight: 700;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .daily-meta {
+        color: #6c757d;
+        font-size: 0.95rem;
+    }
+
+    .daily-note {
+        color: #495057;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .daily-note p:last-child,
+    .daily-note ul:last-child,
+    .daily-note ol:last-child {
+        margin-bottom: 0;
+    }
+
+    .daily-note ul,
+    .daily-note ol {
+        padding-left: 1.25rem;
+    }
+
+    .daily-links a {
+        margin-right: 0.35rem;
+    }
+
+    .daily-empty {
+        border: 1px dashed rgba(0, 0, 0, 0.12);
+        border-radius: 1rem;
+        background: #fafbfd;
+        color: #6c757d;
+        text-align: center;
+        padding: 2rem 1.5rem;
+    }
+
+    .daily-empty i {
+        display: block;
+        font-size: 1.7rem;
+        color: #adb5bd;
+        margin-bottom: 0.75rem;
+    }
+
+    @media (max-width: 767.98px) {
+        .daily-stat {
+            min-width: 0;
+            width: 100%;
+        }
+    }
+</style>
+
+{% if daily_config.show_hero != false %}
+<div class="row">
+    <div class="col-12">
+        <div class="card border-0 shadow-sm daily-hero mb-4">
+            <div class="card-body p-4 p-lg-5 daily-hero-body">
+                <div class="text-muted text-uppercase small mb-2 daily-kicker">{{ daily_config.hero_kicker }}</div>
+                <h1 class="h3 mb-3">{{ daily_config.hero_title }}</h1>
+                <p class="text-muted mb-4 col-lg-8 px-0">{{ daily_config.hero_description }}</p>
+                <div class="d-flex flex-column flex-md-row flex-wrap">
+                    {% for section in daily_sections %}
+                    {% assign section_items = daily_items | where: "category", section.key %}
+                    <div class="daily-stat px-3 py-3 mr-md-3 mb-3 mb-md-0">
+                        <div class="daily-stat-number">{{ section_items | size }}</div>
+                        <div class="small text-muted">{{ section.stat_label | default: section.title }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+    {% for section in daily_sections %}
+        {% assign section_items = daily_items | where: "category", section.key %}
+        {% include widgets/daily_section.html section=section items=section_items %}
+    {% endfor %}
+</div>

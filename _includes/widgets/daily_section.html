@@ -1,0 +1,39 @@
+{% assign section = include.section %}
+{% assign items = include.items %}
+
+<div class="{{ section.column_class | default: 'col-12 mb-4' }}">
+    <div class="card border-0 shadow-sm bg-white h-100 daily-panel">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="daily-section-icon mr-3"><i class="fas fa-{{ section.icon | default: 'star' }}"></i></div>
+                <div>
+                    <h2 class="h4 mb-1">{{ section.title }}</h2>
+                    {% if section.description %}
+                    <div class="daily-meta">{{ section.description }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if items.size > 0 %}
+                {% if section.layout == 'grid' %}
+                <div class="row">
+                    {% for item in items %}
+                    <div class="{{ section.item_column_class | default: 'col-md-6 mb-3' }} daily-grid-item">
+                        {% include widgets/daily_item.html item=item %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                    {% for item in items %}
+                        {% include widgets/daily_item.html item=item image_height=section.image_height %}
+                    {% endfor %}
+                {% endif %}
+            {% else %}
+            <div class="daily-empty">
+                <i class="fas fa-camera"></i>
+                {{ section.empty_message | default: 'No entries yet.' }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
